@@ -1,7 +1,7 @@
 # Subspace - A simple WireGuard VPN server GUI
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![](https://images.microbadger.com/badges/image/subspacecommunity/subspace.svg)](https://microbadger.com/images/subspacecommunity/subspace "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/subspacecommunity/subspace.svg)](https://microbadger.com/images/subspacecommunity/subspace "Get your own version badge on microbadger.com")
@@ -35,6 +35,7 @@ Join the slack community over at the [gophers](https://invite.slack.golangbridge
 
 ## Screenshots
 
+![Screenshot](https://raw.githubusercontent.com/subspacecommunity/subspace/master/screenshot1.png?cachebust=8923409243)
 
 |                                                                                                      |                                                                                                      |     |
 | :--------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------: | --- |
@@ -66,7 +67,7 @@ See the [CONTRIBUTING](https://raw.githubusercontent.com/subspacecommunity/subsp
 **Recommended Specs**
 
 - Type: VPS or dedicated
-- Distribution: Ubuntu 16.04 (Xenial), 18.04 (Bionic) or 20.04 (Focal)
+- Distribution: Ubuntu 16.04 (Xenial) or Ubuntu 18.04 (Bionic)
 - Memory: 512MB or greater
 
 ### 2. Add a DNS record
@@ -122,13 +123,12 @@ apt-get install -y wireguard
 # Remove dnsmasq because it will run inside the container.
 apt-get remove -y dnsmasq
 
-# Disable systemd-resolved listener if it blocks port 53.
-echo "DNSStubListener=no" >> /etc/systemd/resolved.conf
-systemctl restart systemd-resolved
+# Disable systemd-resolved if it blocks port 53.
+systemctl disable systemd-resolved
+systemctl stop systemd-resolved
 
-# Set Cloudfare DNS server.
-echo nameserver 1.1.1.1 > /etc/resolv.conf
-echo nameserver 1.0.0.1 >> /etc/resolv.conf
+# Set DNS server.
+echo nameserver 1.1.1.1 >/etc/resolv.conf
 
 # Load modules.
 modprobe wireguard
@@ -166,7 +166,7 @@ docker create \
     --volume /data:/data \
     --env SUBSPACE_HTTP_HOST="subspace.example.com" \
 	# Optional variable to change upstream DNS provider
-    --env SUBSPACE_NAMESERVERS="1.1.1.1,8.8.8.8" \
+    --env SUBSPACE_NAMESERVER="1.1.1.1" \
 	# Optional variable to change WireGuard Listenport
     --env SUBSPACE_LISTENPORT="51820" \
     # Optional variables to change IPv4/v6 prefixes
@@ -203,7 +203,7 @@ services:
     - SUBSPACE_LETSENCRYPT=true
     - SUBSPACE_HTTP_INSECURE=false
     - SUBSPACE_HTTP_ADDR=":80"
-    - SUBSPACE_NAMESERVERS=1.1.1.1,8.8.8.8
+    - SUBSPACE_NAMESERVER=1.1.1.1
     - SUBSPACE_LISTENPORT=51820
     - SUBSPACE_IPV4_POOL=10.99.97.0/24
     - SUBSPACE_IPV6_POOL=fd00::10:97:0/64
@@ -242,26 +242,21 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://duncan.codes"><img src="https://avatars2.githubusercontent.com/u/15332?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Duncan Mac-Vicar P.</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=dmacvicar" title="Code">💻</a></td>
-    <td align="center"><a href="https://opsnotice.xyz"><img src="https://avatars1.githubusercontent.com/u/12403145?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Valentin Ouvrard</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=valentin2105" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/agonbar"><img src="https://avatars3.githubusercontent.com/u/1553211?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Adrián González Barbosa</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=agonbar" title="Code">💻</a></td>
-    <td align="center"><a href="http://www.improbable.io"><img src="https://avatars3.githubusercontent.com/u/1226100?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Gavin</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=gavinelder" title="Code">💻</a></td>
-    <td align="center"><a href="https://squat.ai"><img src="https://avatars1.githubusercontent.com/u/20484159?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lucas Servén Marín</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=squat" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/jack1902"><img src="https://avatars2.githubusercontent.com/u/39212456?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jack</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=jack1902" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/ssiuhk"><img src="https://avatars3.githubusercontent.com/u/23556929?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sam SIU</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=ssiuhk" title="Code">💻</a></td>
+    <td align="center"><a href="https://duncan.codes"><img src="https://avatars2.githubusercontent.com/u/15332?v=4" width="100px;" alt=""/><br /><sub><b>Duncan Mac-Vicar P.</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=dmacvicar" title="Code">💻</a></td>
+    <td align="center"><a href="https://opsnotice.xyz"><img src="https://avatars1.githubusercontent.com/u/12403145?v=4" width="100px;" alt=""/><br /><sub><b>Valentin Ouvrard</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=valentin2105" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/agonbar"><img src="https://avatars3.githubusercontent.com/u/1553211?v=4" width="100px;" alt=""/><br /><sub><b>Adrián González Barbosa</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=agonbar" title="Code">💻</a></td>
+    <td align="center"><a href="http://www.improbable.io"><img src="https://avatars3.githubusercontent.com/u/1226100?v=4" width="100px;" alt=""/><br /><sub><b>Gavin</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=gavinelder" title="Code">💻</a></td>
+    <td align="center"><a href="https://squat.ai"><img src="https://avatars1.githubusercontent.com/u/20484159?v=4" width="100px;" alt=""/><br /><sub><b>Lucas Servén Marín</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=squat" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/jack1902"><img src="https://avatars2.githubusercontent.com/u/39212456?v=4" width="100px;" alt=""/><br /><sub><b>Jack</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=jack1902" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/ssiuhk"><img src="https://avatars3.githubusercontent.com/u/23556929?v=4" width="100px;" alt=""/><br /><sub><b>Sam SIU</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=ssiuhk" title="Code">💻</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/wizardels"><img src="https://avatars0.githubusercontent.com/u/17042376?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Elliot Westlake</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=wizardels" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/clementperon"><img src="https://avatars.githubusercontent.com/u/1859302?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Clément Péron</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=clementperon" title="Documentation">📖</a></td>
-    <td align="center"><a href="http://blog.selvakn.in"><img src="https://avatars.githubusercontent.com/u/30524?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Selva</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=selvakn" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://github.com/syphernl"><img src="https://avatars.githubusercontent.com/u/639906?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Frank</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=syphernl" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/gianlazz"><img src="https://avatars.githubusercontent.com/u/1166579?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Gian Lazzarini</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=gianlazz" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/wizardels"><img src="https://avatars0.githubusercontent.com/u/17042376?v=4" width="100px;" alt=""/><br /><sub><b>Elliot Westlake</b></sub></a><br /><a href="https://github.com/subspacecommunity/subspace/commits?author=wizardels" title="Code">💻</a></td>
   </tr>
 </table>
 
-<!-- markdownlint-restore -->
+<!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
